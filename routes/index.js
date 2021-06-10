@@ -9,7 +9,7 @@ const { getAllTags,
   addTagsToLinks,
   updateLinks,
   createLinkTag,
-  getLinksByTagName, } = require('../db');
+  getLinkByTagName, } = require('../db');
 
 apiRouter.get("/", (req, res, next) => {
   res.send({
@@ -36,7 +36,7 @@ apiRouter.get('/tags/:tagName/links', async (req, res, next) => {
   console.log(tagName, 'this is the tagname')
 
   try {
-    const linksWithTags = await getLinksByTagName(tagName)
+    const linksWithTags = await getLinkByTagName(tagName)
 
 
     res.send({ links: linksWithTags })
@@ -85,12 +85,11 @@ apiRouter.patch('/links/:linkId', async (req, res, next) => {
     updateFields.comment = comment;
   }
 
-  if (content) {
-    updateFields.count = count += 1;
-  }
+  updateFields.count = count++;
+
 
   try {
-    const originalLink = await getLinkById(linkId);
+    await getLinkById(linkId);
 
 
     const updatedLink = await updateLinks(linkId, updateFields);

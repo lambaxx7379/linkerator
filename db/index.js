@@ -36,14 +36,26 @@ async function getAllTags() {
 }
 
 
-async function getLinkById(id) {
+async function getLinkById(linkId) {
   try {
     const { rows: [link], } = await client.query(`
         SELECT *
         FROM links
-        WHERE id=${id};
+        WHERE id=${linkId};
       `);
 
+    const { rows: tags } = await client.query(
+      `
+        SELECT tags.*
+        FROM tags
+        JOIN link_tags ON tags.id=link_tags."tagId"
+        WHERE link_tags."linkId"=$1;
+      `,
+      [linkId]
+    );
+
+    link.tags = tags
+    console.log(link, 'this is my return from get link by id')
     return link
   } catch (error) {
     throw (error)
@@ -69,24 +81,27 @@ async function getAllLinks() {
 }
 
 async function createLink({ name, mainLink, count, comment, tags = [] }) {
-  // create and return the new routine
   try {
-    const { rows: [link] } = await client.query(`
-      INSERT INTO links(name, "mainLink", count, comment)
-      VALUES($1, $2, $3, $4)
-      RETURNING *;
-    `, [name, mainLink, count, comment])
-
-    const tagList = await createTags(tags);
-
-    return await addTagsToPost(link.id, tagList);
-
+    const {
+      rows: [links],
+    } = await client.query(
+      `
+            INSERT INTO links(name, "mainLink", count, comment)
+            VALUES($1, $2, $3, $4)
+            ON CONFLICT (name) DO NOTHING
+            RETURNING *;
+         `,
+      [name, mainLink, count, comment]
+    );
+    const tagList = await createTags(tags)
+    return await addTagsToLinks(links.id, tagList);
 
   } catch (error) {
-    throw (error)
+    console.log("Could not create links index.js");
+    throw error;
   }
+};
 
-}
 
 async function createTags(tagList) {
   if (tagList.length === 0) {
@@ -122,17 +137,19 @@ async function createTags(tagList) {
 
 async function addTagsToLinks(linkId, tagList) {
   try {
-    const createPostTagPromises = tagList.map((tag) =>
-      createPostTag(linkId, tag.id)
+    const createLinkTagPromises = tagList.map(
+      tag => createLinkTag(linkId, tag.id)
     );
 
-    await Promise.all(createPostTagPromises);
+    await Promise.all(createLinkTagPromises);
 
     return await getLinkById(linkId);
   } catch (error) {
     throw error;
   }
+
 }
+
 
 async function updateLinks(linkId, fields = {}) {
   const { tags } = fields;
@@ -146,7 +163,7 @@ async function updateLinks(linkId, fields = {}) {
     if (setString.length > 0) {
       await client.query(
         `
-        UPDATE link
+        UPDATE links
         SET ${setString}
         WHERE id=${linkId}
         RETURNING *;
@@ -172,11 +189,11 @@ async function updateLinks(linkId, fields = {}) {
       [linkId]
     );
 
-    await addTagsToPost(linkId, tagList);
+    await addTagsToLinks(linkId, tagList);
 
-    return await getPostById(linkId);
+    return await getLinkById(linkId);
   } catch (error) {
-    throw error;
+    throw error
   }
 }
 
@@ -185,33 +202,36 @@ async function createLinkTag(linkId, tagId) {
   try {
     await client.query(
       `
-      INSERT INTO post_tags("linkId", "tagId")
+      INSERT INTO link_tags("linkId", "tagId")
       VALUES ($1, $2)
       ON CONFLICT ("linkId", "tagId") DO NOTHING;
     `,
       [linkId, tagId]
     );
+
   } catch (error) {
     throw error;
   }
 }
 
-async function getLinksByTagName(tagName) {
+
+async function getLinkByTagName(tagName) {
   try {
     const { rows: linkIds } = await client.query(
       `
       SELECT links.id
       FROM links
-       link_tags ON links.id=links_tags."linksId"
-       tags ON tags.id=links_tags."tagId"
+      JOIN link_tags ON links.id=link_tags."linkId"
+      JOIN tags ON tags.id=link_tags."tagId"
       WHERE tags.name=$1;
     `,
       [tagName]
     );
 
-    return await Promise.all(linkIds.map((post) => getLinksById(post.id)));
+    return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
+
   } catch (error) {
-    throw error;
+    throw error
   }
 }
 
@@ -227,6 +247,6 @@ module.exports = {
   addTagsToLinks,
   updateLinks,
   createLinkTag,
-  getLinksByTagName,
+  getLinkByTagName,
 
 }
