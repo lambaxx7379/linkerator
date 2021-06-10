@@ -5,14 +5,18 @@ const {
   getTagById,
   getAllLinks,
   createLink,
-  createTag,
-  // other db methods 
+  createTags,
+  getLinkById,
+  addTagsToLinks,
+  updateLinks,
+  createLinkTag,
+  getLinkByTagName,
 } = require('./index');
 
 
 async function buildTables() {
   try {
-    client.connect();
+
 
     // drop tables in correct order
     console.log("Starting to drop tables...");
@@ -41,8 +45,7 @@ async function buildTables() {
 
     CREATE TABLE tags (
       id SERIAL PRIMARY KEY,
-      name varchar(25) UNIQUE,
-      "tagId" INTEGER REFERENCES links(id)
+      name varchar(25) UNIQUE
     );
 
     CREATE TABLE link_tags(
@@ -68,9 +71,18 @@ async function populateInitialLinks() {
     console.log('starting to create links...');
 
     const linksToCreate = [
-      { name: 'FullStack Academy', mainLink: 'https://www.fullstackacademy.com', count: 0, comment: 'Love this site.' },
-      { name: 'LinkedIn', mainLink: 'https://www.linkedin.com/', count: 0, comment: 'Great for networking.' },
-      { name: 'DEV', mainLink: 'https://dev.to/', count: 0, comment: 'Fantastic dev community, lots of great info.' },
+      {
+        name: 'FullStack Academy', mainLink: 'https://www.fullstackacademy.com', count: 0, comment: 'Love this site.',
+        tags: ["school"],
+      },
+      {
+        name: 'LinkedIn', mainLink: 'https://www.linkedin.com/', count: 0, comment: 'Great for networking.',
+        tags: ["network"],
+      },
+      {
+        name: 'DEV', mainLink: 'https://dev.to/', count: 0, comment: 'Fantastic dev community, lots of great info.',
+        tags: ["community", "network"],
+      },
 
     ]
 
@@ -82,30 +94,55 @@ async function populateInitialLinks() {
   }
 }
 
-async function populateInitialData() {
+
+async function rebuildDB() {
   try {
-    await populateInitialLinks()
+    client.connect();
+
+    await buildTables();
+
+    await populateInitialLinks();
+
 
   } catch (error) {
+    console.log("Error during rebuildDB");
     throw error;
   }
 }
 
-// async function rebuildDB() {
-//   try {
-//     client.connect();
+async function testDB() {
+  try {
+    console.log("Starting to test database...");
 
-//     await buildTables();
-//     await createTables();
-//     await createInitialUsers();
-//     await createInitialPosts();
-//   } catch (error) {
-//     console.log("Error during rebuildDB");
-//     throw error;
-//   }
-// }
+    console.log("Calling getAllLinks");
+    const links = await getAllLinks();
+    console.log("Result:", links);
 
-buildTables()
-  .then(populateInitialData)
+    console.log("Calling updateLinks on links[0]");
+    const updateLinkResult = await updateLinks(links[0].id, {
+      name: "New Name",
+      comment: "Updated Comment",
+    });
+    console.log("Result:", updateLinkResult);
+
+    console.log("Calling getLinkById with 1");
+    const singleLink = await getLinkById(1);
+    console.log("Result:", singleLink);
+
+    console.log("Calling getLinkByTagName with network");
+    const linksWithIlea = await getLinkByTagName("network");
+    console.log("Result:", linksWithIlea);
+
+    console.log("Finished database tests!");
+  } catch (error) {
+    console.log("Error during testDB");
+    throw error;
+  }
+}
+
+
+
+rebuildDB()
+  .then(testDB)
   .catch(console.error)
   .finally(() => client.end());
