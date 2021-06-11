@@ -4,8 +4,6 @@ const DB_NAME = 'localhost:5432/linkerator'
 const DB_URL = process.env.DATABASE_URL || `postgres://${DB_NAME}`;
 const client = new Client(DB_URL);
 
-// database methods
-
 async function getTagById(id) {
   // return the tag
   try {
@@ -80,18 +78,18 @@ async function getAllLinks() {
   }
 }
 
-async function createLink({ name, mainLink, count, comment, tags = [] }) {
+async function createLink({ name, mainLink, comment, tags = [] }) {
   try {
     const {
       rows: [links],
     } = await client.query(
       `
-            INSERT INTO links(name, "mainLink", count, comment)
-            VALUES($1, $2, $3, $4)
+            INSERT INTO links(name, "mainLink", comment)
+            VALUES($1, $2, $3)
             ON CONFLICT (name) DO NOTHING
             RETURNING *;
          `,
-      [name, mainLink, count, comment]
+      [name, mainLink, comment]
     );
     const tagList = await createTags(tags)
     return await addTagsToLinks(links.id, tagList);

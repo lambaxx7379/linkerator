@@ -11,10 +11,15 @@ const { getAllTags,
   createLinkTag,
   getLinkByTagName, } = require('../db');
 
-apiRouter.get("/", (req, res, next) => {
-  res.send({
-    message: "API is under construction!"
-  });
+apiRouter.get("/", async (req, res, next) => {
+  try {
+    const theLinks = await getAllLinks();
+
+    res.send({ links: theLinks });
+  } catch (error) {
+    next(error);
+  }
+
 });
 
 apiRouter.get('/links', async (req, res, next) => {

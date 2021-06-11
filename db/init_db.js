@@ -37,7 +37,7 @@ async function buildTables() {
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         "mainLink" TEXT NOT NULL,
-        count INTEGER,
+        count INTEGER DEFAULT 0,
         comment VARCHAR(255),
         share_date DATE default CURRENT_DATE
         
@@ -72,15 +72,15 @@ async function populateInitialLinks() {
 
     const linksToCreate = [
       {
-        name: 'FullStack Academy', mainLink: 'https://www.fullstackacademy.com', count: 0, comment: 'Love this site.',
+        name: 'FullStack Academy', mainLink: 'https://www.fullstackacademy.com', comment: 'Love this site.',
         tags: ["school"],
       },
       {
-        name: 'LinkedIn', mainLink: 'https://www.linkedin.com/', count: 0, comment: 'Great for networking.',
+        name: 'LinkedIn', mainLink: 'https://www.linkedin.com/', comment: 'Great for networking.',
         tags: ["network"],
       },
       {
-        name: 'DEV', mainLink: 'https://dev.to/', count: 0, comment: 'Fantastic dev community, lots of great info.',
+        name: 'DEV', mainLink: 'https://dev.to/', comment: 'Fantastic dev community, lots of great info.',
         tags: ["community", "network"],
       },
 
