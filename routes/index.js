@@ -1,15 +1,18 @@
-const apiRouter = require('express').Router();
+const apiRouter = require("express").Router();
 
-const { getAllTags,
+const {
+  getAllTags,
   getTagById,
   getAllLinks,
+  changeCount,
   createLink,
   createTags,
   getLinkById,
   addTagsToLinks,
   updateLinks,
   createLinkTag,
-  getLinkByTagName, } = require('../db');
+  getLinkByTagName,
+} = require("../db");
 
 apiRouter.get("/", async (req, res, next) => {
   try {
@@ -19,10 +22,9 @@ apiRouter.get("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
 });
 
-apiRouter.get('/links', async (req, res, next) => {
+apiRouter.get("/links", async (req, res, next) => {
   //  * - on success, it should send back an object like { reports: theReports }
   //  * - on caught error, call next(error)
   try {
@@ -32,23 +34,19 @@ apiRouter.get('/links', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
 });
 
-apiRouter.get('/tags/:tagName/links', async (req, res, next) => {
+apiRouter.get("/tags/:tagName/links", async (req, res, next) => {
   // read the tagname from the params
   const { tagName } = req.params;
-  console.log(tagName, 'this is the tagname')
+  console.log(tagName, "this is the tagname");
 
   try {
-    const linksWithTags = await getLinkByTagName(tagName)
+    const linksWithTags = await getLinkByTagName(tagName);
 
-
-    res.send({ links: linksWithTags })
-
+    res.send({ links: linksWithTags });
   } catch (error) {
-
-    next(error)
+    next(error);
   }
 });
 
@@ -76,7 +74,7 @@ apiRouter.post("/links", async (req, res, next) => {
   }
 });
 
-apiRouter.patch('/links/:linkId', async (req, res, next) => {
+apiRouter.patch("/links/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
   const { comment, count, tags } = req.body;
 
@@ -92,19 +90,22 @@ apiRouter.patch('/links/:linkId', async (req, res, next) => {
 
   updateFields.count = count++;
 
-
   try {
     await getLinkById(linkId);
 
-
     const updatedLink = await updateLinks(linkId, updateFields);
-    res.send({ link: updatedLink })
-
+    res.send({ link: updatedLink });
   } catch (error) {
     next(error);
   }
 });
 
+apiRouter.put("/links/:linkId/clicked", async (req, res, next) => {
+  const { id } = req.param;
+  const link = await changeCount(id);
+  res.send({
+    link,
+  });
+});
+
 module.exports = apiRouter;
-
-

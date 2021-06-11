@@ -1,21 +1,23 @@
 // Connect to DB
-const { Client } = require('pg');
-const DB_NAME = 'localhost:5432/linkerator'
+const { Client } = require("pg");
+const DB_NAME = "localhost:5432/linkerator";
 const DB_URL = process.env.DATABASE_URL || `postgres://${DB_NAME}`;
 const client = new Client(DB_URL);
 
 async function getTagById(id) {
   // return the tag
   try {
-    const { rows: [tag], } = await client.query(`
+    const {
+      rows: [tag],
+    } = await client.query(`
           SELECT *
           FROM tags
           WHERE id=${id};
         `);
 
-    return tag
+    return tag;
   } catch (error) {
-    throw (error)
+    throw error;
   }
 }
 
@@ -25,18 +27,19 @@ async function getAllTags() {
     const { rows } = await client.query(`
     SELECT * 
     FROM tags;
-  `)
+  `);
 
-    return rows
+    return rows;
   } catch (error) {
-    throw (error)
+    throw error;
   }
 }
 
-
 async function getLinkById(linkId) {
   try {
-    const { rows: [link], } = await client.query(`
+    const {
+      rows: [link],
+    } = await client.query(`
         SELECT *
         FROM links
         WHERE id=${linkId};
@@ -52,14 +55,13 @@ async function getLinkById(linkId) {
       [linkId]
     );
 
-    link.tags = tags
-    console.log(link, 'this is my return from get link by id')
-    return link
+    link.tags = tags;
+    console.log(link, "this is my return from get link by id");
+    return link;
   } catch (error) {
-    throw (error)
+    throw error;
   }
 }
-
 
 async function getAllLinks() {
   // select and return an array of all link, include their tags - need to get tags
@@ -67,14 +69,12 @@ async function getAllLinks() {
     const { rows: id } = await client.query(`
     SELECT id 
     FROM links;
-  `)
+  `);
 
-    const links = await Promise.all(
-      id.map((link) => getLinkById(link.id))
-    )
-    return links
+    const links = await Promise.all(id.map((link) => getLinkById(link.id)));
+    return links;
   } catch (error) {
-    throw (error)
+    throw error;
   }
 }
 
@@ -91,15 +91,13 @@ async function createLink({ name, mainLink, comment, tags = [] }) {
          `,
       [name, mainLink, comment]
     );
-    const tagList = await createTags(tags)
+    const tagList = await createTags(tags);
     return await addTagsToLinks(links.id, tagList);
-
   } catch (error) {
     console.log("Could not create links index.js");
     throw error;
   }
-};
-
+}
 
 async function createTags(tagList) {
   if (tagList.length === 0) {
@@ -135,8 +133,8 @@ async function createTags(tagList) {
 
 async function addTagsToLinks(linkId, tagList) {
   try {
-    const createLinkTagPromises = tagList.map(
-      tag => createLinkTag(linkId, tag.id)
+    const createLinkTagPromises = tagList.map((tag) =>
+      createLinkTag(linkId, tag.id)
     );
 
     await Promise.all(createLinkTagPromises);
@@ -145,9 +143,7 @@ async function addTagsToLinks(linkId, tagList) {
   } catch (error) {
     throw error;
   }
-
 }
-
 
 async function updateLinks(linkId, fields = {}) {
   const { tags } = fields;
@@ -191,10 +187,9 @@ async function updateLinks(linkId, fields = {}) {
 
     return await getLinkById(linkId);
   } catch (error) {
-    throw error
+    throw error;
   }
 }
-
 
 async function createLinkTag(linkId, tagId) {
   try {
@@ -206,12 +201,10 @@ async function createLinkTag(linkId, tagId) {
     `,
       [linkId, tagId]
     );
-
   } catch (error) {
     throw error;
   }
 }
-
 
 async function getLinkByTagName(tagName) {
   try {
@@ -227,15 +220,32 @@ async function getLinkByTagName(tagName) {
     );
 
     return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
-
   } catch (error) {
-    throw error
+    throw error;
+  }
+}
+
+async function changeCount(linkId) {
+  try {
+    const {
+      rows: [link],
+    } = await client.query(`
+            UPDATE links 
+            SET count = count + 1
+            WHERE id = ${linkId}
+            RETURNING *;
+        `);
+
+    return link;
+  } catch (error) {
+    throw error;
   }
 }
 
 // export
 module.exports = {
   client,
+  changeCount,
   getAllTags,
   getTagById,
   getAllLinks,
@@ -246,5 +256,4 @@ module.exports = {
   updateLinks,
   createLinkTag,
   getLinkByTagName,
-
-}
+};
