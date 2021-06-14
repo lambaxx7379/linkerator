@@ -100,12 +100,14 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
   }
 });
 
-apiRouter.put("/links/:linkId/clicked", async (req, res, next) => {
-  const { id } = req.param;
-  const link = await changeCount(id);
-  res.send({
-    link,
-  });
+apiRouter.put("/links/:linkId", async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const clicked = await changeCount(id);
+    res.send(clicked);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = apiRouter;

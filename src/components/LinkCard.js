@@ -17,12 +17,9 @@ const LinkCard = () => {
   };
 
   useEffect(getAllLinks, []);
+
   const handleUpdateCount = async (link) => {
-    try {
-      const count = await updateCount(link);
-    } catch (error) {
-      console.error(error);
-    }
+    await updateCount(link);
   };
   return (
     <div>
@@ -37,7 +34,7 @@ const LinkCard = () => {
                 <span
                   className="mainlink"
                   onClick={() => {
-                    handleUpdateCount(link);
+                    handleUpdateCount(link.id);
                     window.open(link.mainLink, "_blank").focus();
                   }}
                 >
