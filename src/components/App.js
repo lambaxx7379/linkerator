@@ -1,6 +1,7 @@
 import React from "react";
 import './app.css';
 import CreateForm from "./CreateForm";
+import LinkCard from "./LinkCard";
 
 const App = () => {
   return (
@@ -88,6 +89,7 @@ const App = () => {
 
       <div className="right createForm">
         <CreateForm />
+        <LinkCard />
       </div>
 
 
