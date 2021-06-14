@@ -1,0 +1,8 @@
+.mainlink:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.tags {
+  display: flex;
+}
