@@ -231,26 +231,16 @@ async function changeCount(id) {
       rows: [link],
     } = await client.query(
       `
-           SELECT * FROM links
-           WHERE id = $1;
+           UPDATE links 
+           SET count = count + 1
+           WHERE id = $1
+           RETURNING *;
         `,
       [id]
     );
     console.log("Link Information", link);
 
-    const currentCount = link.count;
-    const newCount = currentCount + 1;
-
-    await client.query(
-      `
-      UPDATE links
-      SET count = ${newCount}
-      WHERE id = $1
-    `,
-      [id]
-    );
-
-    return getAllLinks();
+    return link;
   } catch (error) {
     throw error;
   }

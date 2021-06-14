@@ -10,7 +10,6 @@ const LinkCard = () => {
       const links = await getLinks();
       console.log(links);
       setGrabbedLinks(links);
-      console.log(grabbedLinks);
     } catch (error) {
       console.error(error);
     }
@@ -19,7 +18,9 @@ const LinkCard = () => {
   useEffect(getAllLinks, []);
 
   const handleUpdateCount = async (link) => {
+    console.log(link);
     await updateCount(link);
+    window.location.reload();
   };
   return (
     <div>
@@ -34,8 +35,8 @@ const LinkCard = () => {
                 <span
                   className="mainlink"
                   onClick={() => {
-                    handleUpdateCount(link.id);
                     window.open(link.mainLink, "_blank").focus();
+                    handleUpdateCount(link.id);
                   }}
                 >
                   {link.mainLink}

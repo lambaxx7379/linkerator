@@ -11,13 +11,11 @@ const {
   updateLinks,
   createLinkTag,
   getLinkByTagName,
-} = require('./index');
-
+  changeCount,
+} = require("./index");
 
 async function buildTables() {
   try {
-
-
     // drop tables in correct order
     console.log("Starting to drop tables...");
     client.query(`
@@ -57,43 +55,45 @@ async function buildTables() {
   `);
 
     console.log("Finished building tables!");
-
-
   } catch (error) {
     throw error;
   }
-
-
 }
 
 async function populateInitialLinks() {
   try {
-    console.log('starting to create links...');
+    console.log("starting to create links...");
 
     const linksToCreate = [
       {
-        name: 'FullStack Academy', mainLink: 'https://www.fullstackacademy.com', comment: 'Love this site.',
+        name: "FullStack Academy",
+        mainLink: "https://www.fullstackacademy.com",
+        comment: "Love this site.",
         tags: ["school"],
       },
       {
-        name: 'LinkedIn', mainLink: 'https://www.linkedin.com/', comment: 'Great for networking.',
+        name: "LinkedIn",
+        mainLink: "https://www.linkedin.com/",
+        comment: "Great for networking.",
         tags: ["network"],
       },
       {
-        name: 'DEV', mainLink: 'https://dev.to/', comment: 'Fantastic dev community, lots of great info.',
+        name: "DEV",
+        mainLink: "https://dev.to/",
+        comment: "Fantastic dev community, lots of great info.",
         tags: ["community", "network"],
       },
+    ];
 
-    ]
-
-    const links = await Promise.all(linksToCreate.map(link => createLink(link)));
-    console.log('Links Created: ', links)
-    console.log('Finished creating links.')
+    const links = await Promise.all(
+      linksToCreate.map((link) => createLink(link))
+    );
+    console.log("Links Created: ", links);
+    console.log("Finished creating links.");
   } catch (error) {
     throw error;
   }
 }
-
 
 async function rebuildDB() {
   try {
@@ -102,8 +102,6 @@ async function rebuildDB() {
     await buildTables();
 
     await populateInitialLinks();
-
-
   } catch (error) {
     console.log("Error during rebuildDB");
     throw error;
@@ -133,14 +131,16 @@ async function testDB() {
     const linksWithIlea = await getLinkByTagName("network");
     console.log("Result:", linksWithIlea);
 
+    console.log("Testing click count update");
+    const clickedLink = await changeCount(2);
+    console.log("Clicked Link", clickedLink);
+
     console.log("Finished database tests!");
   } catch (error) {
     console.log("Error during testDB");
     throw error;
   }
 }
-
-
 
 rebuildDB()
   .then(testDB)
