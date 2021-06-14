@@ -36,9 +36,9 @@ export async function updateLink(linkId, updatedInfo) {
   }
 }
 
-export async function updateCount(id) {
+export async function updateCount(linkId) {
   try {
-    const { data } = await axios.put(`/api/links/${id}/clicked`);
+    const { data } = await axios.put(`/api/links/${linkId.id}/clicked`);
     return data;
   } catch (error) {
     throw error;
