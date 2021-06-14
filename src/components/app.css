@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  display: flex;
+  height: 100vh;
+}
+
+.App {
+  font-family: "Segoe UI", "Ubuntu", "Roboto", "Open Sans", "Helvetica Neue",
+    sans-serif;
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "left right";
+  grid-template-rows: 20% 1fr;
+  grid-template-columns: 70% 1fr;
+  width: 100vw;
+}
+
+header {
+  grid-area: header;
+  background-color: burlywood;
+}
+
+.left.card {
+  grid-area: left;
+  overflow: auto;
+  background-color: beige;
+}
+
+.right.createForm {
+  grid-area: right;
+  background-color: bisque;
+}
+
+.cards-container {
+  grid-area: left;
+  background-color: darkviolet;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+}
+
+.inner-card {
+  margin: 7px;
+  background-color: gainsboro;
+  padding: 10px;
+}
+
+div.tags {
+  background-color: rgb(53, 14, 226);
+  color: white;
+  margin: 7px;
+  padding: 10px;
+  border-radius: 3rem;
+}
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+}

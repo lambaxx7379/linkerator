@@ -56,7 +56,7 @@ async function getLinkById(linkId) {
     );
 
     link.tags = tags;
-    console.log(link, "this is my return from get link by id");
+
     return link;
   } catch (error) {
     throw error;

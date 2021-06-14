@@ -25,12 +25,22 @@ apiRouter.get("/", async (req, res, next) => {
 });
 
 apiRouter.get("/links", async (req, res, next) => {
-  //  * - on success, it should send back an object like { reports: theReports }
-  //  * - on caught error, call next(error)
+
   try {
     const theLinks = await getAllLinks();
 
     res.send({ links: theLinks });
+  } catch (error) {
+    next(error);
+  }
+});
+
+apiRouter.get("/tags", async (req, res, next) => {
+
+  try {
+    const theTags = await getAllTags();
+
+    res.send({ tags: theTags });
   } catch (error) {
     next(error);
   }
@@ -76,7 +86,7 @@ apiRouter.post("/links", async (req, res, next) => {
 
 apiRouter.patch("/links/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
-  const { comment, count, tags } = req.body;
+  const { comment, name, tags } = req.body;
 
   const updateFields = {};
 
@@ -88,7 +98,10 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
     updateFields.comment = comment;
   }
 
-  updateFields.count = count++;
+  if (name) {
+    updateFields.name = name;
+  }
+
 
   try {
     await getLinkById(linkId);
@@ -101,7 +114,7 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
 });
 
 apiRouter.put("/links/:linkId/clicked", async (req, res, next) => {
-  const { id } = req.param;
+  const { id } = req.params;
   const link = await changeCount(id);
   res.send({
     link,
