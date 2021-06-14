@@ -18,9 +18,14 @@ export async function getTags() {
   }
 }
 
-export async function createNewLink(newLink) {
+export async function createNewLink(name, mainLink, comment, tags) {
   try {
-    const { data } = await axios.post("/api/links", newLink);
+    const { data } = await axios.post("/api/links", {
+      name,
+      mainLink,
+      comment,
+      tags,
+    });
     return data;
   } catch (error) {
     throw error;
@@ -36,9 +41,9 @@ export async function updateLink(linkId, updatedInfo) {
   }
 }
 
-export async function updateCount(linkId) {
+export async function updateCount(id) {
   try {
-    const { data } = await axios.put(`/api/links/${linkId.id}/clicked`);
+    const { data } = await axios.put(`/api/links/${id}`);
     return data;
   } catch (error) {
     throw error;

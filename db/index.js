@@ -225,18 +225,32 @@ async function getLinkByTagName(tagName) {
   }
 }
 
-async function changeCount(linkId) {
+async function changeCount(id) {
   try {
     const {
       rows: [link],
-    } = await client.query(`
-            UPDATE links 
-            SET count = count + 1
-            WHERE id = ${linkId}
-            RETURNING *;
-        `);
+    } = await client.query(
+      `
+           SELECT * FROM links
+           WHERE id = $1;
+        `,
+      [id]
+    );
+    console.log("Link Information", link);
 
-    return link;
+    const currentCount = link.count;
+    const newCount = currentCount + 1;
+
+    await client.query(
+      `
+      UPDATE links
+      SET count = ${newCount}
+      WHERE id = $1
+    `,
+      [id]
+    );
+
+    return getAllLinks();
   } catch (error) {
     throw error;
   }
