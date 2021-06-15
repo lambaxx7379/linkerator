@@ -13,6 +13,7 @@ const {
   updateLinks,
   createLinkTag,
   getLinkByTagName,
+  updateComment,
 } = require("../db");
 
 apiRouter.get("/", async (req, res, next) => {
@@ -89,7 +90,7 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
     await changeCount(linkId);
     await getLinkById(linkId);
 
-    const updatedLink = await updateLinks(linkId, updateFields);
+    const updatedLink = await updateComment(comment, linkId);
     res.send({ link: updatedLink });
   } catch (error) {
     next(error);

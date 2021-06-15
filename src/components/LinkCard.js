@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+
 import "./LinkCard.css";
-import { getLinks, updateCount } from "../api";
+import { getLinks, updateCount, updateLink } from "../api";
 
 const LinkCard = () => {
   const [grabbedLinks, setGrabbedLinks] = useState();
@@ -22,6 +23,16 @@ const LinkCard = () => {
     await updateCount(link);
     window.location.reload();
   };
+
+  const handleSubmitUpdateComment = async (comment, id) => {
+    try {
+      await updateLink(comment, id);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <h1>Links:</h1>
@@ -59,7 +70,16 @@ const LinkCard = () => {
                     : null}
                 </div>
               </h3>
-              <button>Edit</button>
+              <div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitUpdateComment(link.comment, link.id)
+                  }
+                >
+                  Edit Comment
+                </button>
+              </div>
             </div>
           );
         })}

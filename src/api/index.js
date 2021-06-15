@@ -32,9 +32,21 @@ export async function createNewLink(name, mainLink, comment, tags) {
   }
 }
 
-export async function updateLink(linkId, updatedInfo) {
+export async function updateLink(comment, id) {
   try {
-    const { data } = await axios.patch(`/api/links/${linkId.id}`, updatedInfo);
+    let updatedInfo = {};
+    console.log(comment);
+    console.log(id);
+    let newComment = prompt(
+      "What would you like to change the comment to?",
+      comment
+    );
+
+    if (newComment) {
+      updatedInfo.comment = newComment;
+    }
+    const { data } = await axios.patch(`/api/links/${id}`, updatedInfo);
+    console.log(data);
     return data;
   } catch (error) {
     throw error;
