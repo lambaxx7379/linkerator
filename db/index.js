@@ -246,9 +246,30 @@ async function changeCount(id) {
   }
 }
 
+async function updateComment(comment, id) {
+  try {
+    const {
+      rows: [link],
+    } = await client.query(
+      `
+      UPDATE links
+      SET comment =$1
+      WHERE id = $2
+      RETURNING *;
+    `,
+      [comment, id]
+    );
+    console.log(link);
+    return link;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // export
 module.exports = {
   client,
+  updateComment,
   changeCount,
   getAllTags,
   getTagById,
