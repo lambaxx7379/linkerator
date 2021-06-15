@@ -18,12 +18,7 @@ export async function getTags() {
   }
 }
 
-<<<<<<< Updated upstream
 export async function createNewLink(name, mainLink, comment, tags) {
-=======
-export async function createNewLink(newLink) {
-
->>>>>>> Stashed changes
   try {
     const { data } = await axios.post("/api/links", {
       name,

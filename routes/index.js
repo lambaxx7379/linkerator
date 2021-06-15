@@ -37,11 +37,7 @@ apiRouter.get("/links", async (req, res, next) => {
   }
 });
 
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> main
+
 apiRouter.get("/tags", async (req, res, next) => {
 
   try {
@@ -53,23 +49,6 @@ apiRouter.get("/tags", async (req, res, next) => {
   }
 });
 
-<<<<<<< HEAD
-=======
-apiRouter.get("/search/:searchTerm/links", async (req, res, next) => {
-
-  try {
-    const searchTerm = await req.params;
-
-    const searchLinks = await getLinksBySearch(searchTerm)
-
-    res.send({ links: searchLinks });
-  } catch (error) {
-    next(error);
-  }
-});
-
->>>>>>> Stashed changes
->>>>>>> main
 apiRouter.get("/tags/:tagName/links", async (req, res, next) => {
   // read the tagname from the params
   const { tagName } = req.params;
@@ -116,14 +95,6 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
     updateFields.comment = comment;
   }
 
-<<<<<<< HEAD
-  if (name) {
-    updateFields.name = name;
-  }
-
-
-=======
->>>>>>> main
   try {
     await changeCount(linkId);
     await getLinkById(linkId);
@@ -135,14 +106,6 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
   }
 });
 
-<<<<<<< HEAD
-apiRouter.put("/links/:linkId/clicked", async (req, res, next) => {
-  const { id } = req.params;
-  const link = await changeCount(id);
-  res.send({
-    link,
-  });
-=======
 apiRouter.patch("/links/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
   console.log("LINK ID", linkId);
@@ -153,7 +116,6 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
->>>>>>> main
 });
 
 module.exports = apiRouter;
