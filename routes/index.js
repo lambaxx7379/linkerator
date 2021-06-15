@@ -1,5 +1,6 @@
 const apiRouter = require("express").Router();
 
+const { ID } = require("webpack/lib/ModuleFilenameHelpers");
 const {
   getAllTags,
   getTagById,
@@ -80,17 +81,12 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
 
   const updateFields = {};
 
-  if (tags && tags.length > 0) {
-    updateFields.tags = tags.trim().split(/\s+/);
-  }
-
   if (comment) {
     updateFields.comment = comment;
   }
 
-  updateFields.count = count++;
-
   try {
+    await changeCount(linkId);
     await getLinkById(linkId);
 
     const updatedLink = await updateLinks(linkId, updateFields);
@@ -100,10 +96,12 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
   }
 });
 
-apiRouter.put("/links/:linkId", async (req, res, next) => {
-  const id = req.params.id;
+apiRouter.patch("/links/:linkId", async (req, res, next) => {
+  const { linkId } = req.params;
+  console.log("LINK ID", linkId);
+
   try {
-    const clicked = await changeCount(id);
+    const clicked = await changeCount(linkId);
     res.send(clicked);
   } catch (error) {
     next(error);

@@ -24,7 +24,7 @@ const CreateForm = () => {
           />
           <label>Link:</label>
           <input
-            placeholder="Link..."
+            placeholder="Link(Must have https://www.)..."
             // value="{mainLink}"
             onChange={(event) => setMainLink(event.target.value)}
           />
