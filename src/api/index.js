@@ -18,7 +18,12 @@ export async function getTags() {
   }
 }
 
+<<<<<<< Updated upstream
 export async function createNewLink(name, mainLink, comment, tags) {
+=======
+export async function createNewLink(newLink) {
+
+>>>>>>> Stashed changes
   try {
     const { data } = await axios.post("/api/links", {
       name,
@@ -57,6 +62,15 @@ export async function updateCount(id) {
   try {
     const { data } = await axios.patch(`/api/links/${id}`);
     console.log(data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function linksWithTags(tagName) {
+  try {
+    const { data } = await axios.get(`/api/tags/${tagName}/links`);
     return data;
   } catch (error) {
     throw error;

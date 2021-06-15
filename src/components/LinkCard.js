@@ -61,12 +61,12 @@ const LinkCard = () => {
                 <div className="tags">
                   {link.tags[0]
                     ? link.tags.map((tags, index) => {
-                        return (
-                          <span>
-                            <h3 key={index}>{tags.name}</h3>
-                          </span>
-                        );
-                      })
+                      return (
+                        <span>
+                          <h3 key={index}>{tags.name}</h3>
+                        </span>
+                      );
+                    })
                     : null}
                 </div>
               </h3>

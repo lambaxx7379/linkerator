@@ -38,10 +38,36 @@ apiRouter.get("/links", async (req, res, next) => {
   }
 });
 
+<<<<<<< Updated upstream
+=======
+apiRouter.get("/tags", async (req, res, next) => {
+
+  try {
+    const theTags = await getAllTags();
+
+    res.send({ tags: theTags });
+  } catch (error) {
+    next(error);
+  }
+});
+
+apiRouter.get("/search/:searchTerm/links", async (req, res, next) => {
+
+  try {
+    const searchTerm = await req.params;
+
+    const searchLinks = await getLinksBySearch(searchTerm)
+
+    res.send({ links: searchLinks });
+  } catch (error) {
+    next(error);
+  }
+});
+
+>>>>>>> Stashed changes
 apiRouter.get("/tags/:tagName/links", async (req, res, next) => {
   // read the tagname from the params
   const { tagName } = req.params;
-  console.log(tagName, "this is the tagname");
 
   try {
     const linksWithTags = await getLinkByTagName(tagName);
@@ -53,7 +79,7 @@ apiRouter.get("/tags/:tagName/links", async (req, res, next) => {
 });
 
 apiRouter.post("/links", async (req, res, next) => {
-  const { mainLink, count, comment, name, tags = "" } = req.body;
+  const { mainLink, comment, name, tags = "" } = req.body;
   const tagArr = tags.trim().split(/\s+/);
   const linkData = {};
 
@@ -63,7 +89,6 @@ apiRouter.post("/links", async (req, res, next) => {
   }
   try {
     (linkData.mainLink = mainLink),
-      (linkData.count = count),
       (linkData.comment = comment),
       (linkData.name = name);
 
