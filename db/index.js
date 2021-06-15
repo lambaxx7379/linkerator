@@ -80,6 +80,7 @@ async function getAllLinks() {
 
 async function createLink({ name, mainLink, comment, tags = [] }) {
   try {
+
     const {
       rows: [links],
     } = await client.query(
@@ -225,18 +226,57 @@ async function getLinkByTagName(tagName) {
   }
 }
 
-async function changeCount(linkId) {
+async function changeCount(id) {
   try {
     const {
       rows: [link],
-    } = await client.query(`
-            UPDATE links 
-            SET count = count + 1
-            WHERE id = ${linkId}
-            RETURNING *;
-        `);
+    } = await client.query(
+      `
+           UPDATE links 
+           SET count = count + 1
+           WHERE id = $1
+           RETURNING *;
+        `,
+      [id]
+    );
+    console.log("Link Information", link);
 
     return link;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateComment(comment, id) {
+  try {
+    const {
+      rows: [link],
+    } = await client.query(
+      `
+      UPDATE links
+      SET comment =$1
+      WHERE id = $2
+      RETURNING *;
+    `,
+      [comment, id]
+    );
+    console.log(link);
+    return link;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getLinksBySearch(searchTerm) {
+  try {
+    const {
+      rows: [linkIds],
+    } = await client.query(`
+            SELECT links.id FROM links 
+            WHERE links.name LIKE '%${searchTerm}%';
+        `);
+    return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
+
   } catch (error) {
     throw error;
   }
@@ -245,6 +285,7 @@ async function changeCount(linkId) {
 // export
 module.exports = {
   client,
+  updateComment,
   changeCount,
   getAllTags,
   getTagById,
@@ -256,4 +297,5 @@ module.exports = {
   updateLinks,
   createLinkTag,
   getLinkByTagName,
+  getLinksBySearch
 };

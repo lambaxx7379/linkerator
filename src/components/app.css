@@ -1,24 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&family=Quicksand:wght@300;400;600&display=swap");
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Quicksand", sans-serif;
 }
 
 #root {
   display: flex;
   height: 100vh;
+  background-color: #1f306e;
 }
 
 .App {
-  font-family: "Segoe UI", "Ubuntu", "Roboto", "Open Sans", "Helvetica Neue",
-    sans-serif;
   display: grid;
   grid-template-areas:
-    "header header"
-    "left right";
-  grid-template-rows: 20% 1fr;
-  grid-template-columns: 70% 1fr;
+    "header"
+    "top"
+    "bottom";
+  grid-template-rows: 20% auto auto;
+  grid-template-columns: auto;
   width: 100vw;
+  height: 100vh;
+  background-color: #1b1b1b;
 }
 
 header {
@@ -26,39 +31,158 @@ header {
   background-color: burlywood;
 }
 
-.left.card {
-  grid-area: left;
+.bottom.card {
+  grid-area: bottom;
   overflow: auto;
-  background-color: beige;
 }
 
-.right.createForm {
-  grid-area: right;
+.top.createForm {
+  grid-area: top;
   background-color: bisque;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.form-container {
+  display: grid;
+  grid-template: 0.5fr auto / auto;
+  padding: 10px;
+}
+
+.form-header {
+  grid-row: 1 / 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.the-form {
+  grid-row: 2 / 3;
+}
+
+input {
+  margin: 7px;
+  padding: 10px;
 }
 
 .cards-container {
-  grid-area: left;
-  background-color: darkviolet;
+  grid-area: bottom;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  padding: 10px;
+  background-color: #1b1b1b;
 }
 
 .inner-card {
+  display: grid;
+  grid-template: auto auto 1fr / 4fr 1fr;
   margin: 7px;
   background-color: gainsboro;
+}
+
+.top-row-card {
+  display: grid;
+  grid-template: 4fr / 1fr;
+  grid-column: 1/3;
+  background-color: #1b1b1bd7;
+  color: white;
+}
+
+.click-count-container {
+  display: grid;
+  grid-row: 1 / 2;
+  grid-column: 2/3;
+  font-family: "Fjalla One", sans-serif;
+  background-color: brown;
+  padding: 5px;
+}
+
+.date-container {
+  grid-row: 1/2;
+  grid-column: 1/2;
+  padding: 5px;
+  margin-left: 20px;
+}
+
+.click-count {
+  font-size: large;
+  text-align: center;
+  font-weight: bold;
+}
+
+.click-label-bottom {
+  font-size: x-small;
+}
+
+.date {
+  grid-row: 1/2;
+  grid-column: 1/2;
+  font-family: "Fjalla One", sans-serif;
+  font-size: large;
+  letter-spacing: 1px;
+}
+
+.date-label-bottom {
+  font-size: x-small;
+}
+
+.link-info {
+  margin-left: 20px;
+  margin-right: 20px;
+  grid-row: 2/3;
+  grid-column: 1/3;
+  padding-top: 20px;
+  padding-bottom: 0px;
+}
+
+.link-name {
+  font-size: xx-large;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.link {
+  font-size: x-large;
+  padding-bottom: 5px;
+}
+.comment {
+  font-size: large;
+  padding-bottom: 5px;
+}
+
+button {
+  grid-row: 3 / 4;
+  grid-column: 2/3;
+  margin: 20px;
+  background-color: #1b1b1bd7;
+  color: white;
+  font-family: "Fjalla One", sans-serif;
+  font-size: large;
   padding: 10px;
 }
 
-div.tags {
-  background-color: rgb(53, 14, 226);
+button.sub-btn {
+  background-color: #1b1b1bd7;
   color: white;
   margin: 7px;
   padding: 10px;
-  border-radius: 3rem;
+  font-family: "Quicksand", sans-serif;
+}
+
+div.tags {
+  background-color: brown;
+  color: white;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 2.5rem;
 }
 
 .tag-container {
   display: flex;
   flex-wrap: wrap;
+  grid-row: 3 / 4;
+  grid-column: 1/2;
+  padding: 10px;
 }

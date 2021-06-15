@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+
 import "./LinkCard.css";
-import { getLinks, updateCount } from "../api";
+import { getLinks, updateCount, updateLink } from "../api";
 
 const LinkCard = () => {
   const [grabbedLinks, setGrabbedLinks] = useState();
@@ -10,20 +11,28 @@ const LinkCard = () => {
       const links = await getLinks();
       console.log(links);
       setGrabbedLinks(links);
-      console.log(grabbedLinks);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(getAllLinks, []);
+
   const handleUpdateCount = async (link) => {
+    console.log(link);
+    await updateCount(link);
+    window.location.reload();
+  };
+
+  const handleSubmitUpdateComment = async (comment, id) => {
     try {
-      const count = await updateCount(link);
+      await updateLink(comment, id);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
     <div>
       <h1>Links:</h1>
@@ -37,8 +46,8 @@ const LinkCard = () => {
                 <span
                   className="mainlink"
                   onClick={() => {
-                    handleUpdateCount(link);
                     window.open(link.mainLink, "_blank").focus();
+                    handleUpdateCount(link.id);
                   }}
                 >
                   {link.mainLink}
@@ -52,16 +61,25 @@ const LinkCard = () => {
                 <div className="tags">
                   {link.tags[0]
                     ? link.tags.map((tags, index) => {
-                        return (
-                          <span>
-                            <h3 key={index}>{tags.name}</h3>
-                          </span>
-                        );
-                      })
+                      return (
+                        <span>
+                          <h3 key={index}>{tags.name}</h3>
+                        </span>
+                      );
+                    })
                     : null}
                 </div>
               </h3>
-              <button>Edit</button>
+              <div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitUpdateComment(link.comment, link.id)
+                  }
+                >
+                  Edit Comment
+                </button>
+              </div>
             </div>
           );
         })}

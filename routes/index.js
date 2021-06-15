@@ -1,5 +1,6 @@
 const apiRouter = require("express").Router();
 
+const { ID } = require("webpack/lib/ModuleFilenameHelpers");
 const {
   getAllTags,
   getTagById,
@@ -12,6 +13,7 @@ const {
   updateLinks,
   createLinkTag,
   getLinkByTagName,
+  updateComment,
 } = require("../db");
 
 apiRouter.get("/", async (req, res, next) => {
@@ -35,6 +37,11 @@ apiRouter.get("/links", async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> main
 apiRouter.get("/tags", async (req, res, next) => {
 
   try {
@@ -46,10 +53,26 @@ apiRouter.get("/tags", async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+apiRouter.get("/search/:searchTerm/links", async (req, res, next) => {
+
+  try {
+    const searchTerm = await req.params;
+
+    const searchLinks = await getLinksBySearch(searchTerm)
+
+    res.send({ links: searchLinks });
+  } catch (error) {
+    next(error);
+  }
+});
+
+>>>>>>> Stashed changes
+>>>>>>> main
 apiRouter.get("/tags/:tagName/links", async (req, res, next) => {
   // read the tagname from the params
   const { tagName } = req.params;
-  console.log(tagName, "this is the tagname");
 
   try {
     const linksWithTags = await getLinkByTagName(tagName);
@@ -61,7 +84,7 @@ apiRouter.get("/tags/:tagName/links", async (req, res, next) => {
 });
 
 apiRouter.post("/links", async (req, res, next) => {
-  const { mainLink, count, comment, name, tags = "" } = req.body;
+  const { mainLink, comment, name, tags = "" } = req.body;
   const tagArr = tags.trim().split(/\s+/);
   const linkData = {};
 
@@ -71,7 +94,6 @@ apiRouter.post("/links", async (req, res, next) => {
   }
   try {
     (linkData.mainLink = mainLink),
-      (linkData.count = count),
       (linkData.comment = comment),
       (linkData.name = name);
 
@@ -90,35 +112,48 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
 
   const updateFields = {};
 
-  if (tags && tags.length > 0) {
-    updateFields.tags = tags.trim().split(/\s+/);
-  }
-
   if (comment) {
     updateFields.comment = comment;
   }
 
+<<<<<<< HEAD
   if (name) {
     updateFields.name = name;
   }
 
 
+=======
+>>>>>>> main
   try {
+    await changeCount(linkId);
     await getLinkById(linkId);
 
-    const updatedLink = await updateLinks(linkId, updateFields);
+    const updatedLink = await updateComment(comment, linkId);
     res.send({ link: updatedLink });
   } catch (error) {
     next(error);
   }
 });
 
+<<<<<<< HEAD
 apiRouter.put("/links/:linkId/clicked", async (req, res, next) => {
   const { id } = req.params;
   const link = await changeCount(id);
   res.send({
     link,
   });
+=======
+apiRouter.patch("/links/:linkId", async (req, res, next) => {
+  const { linkId } = req.params;
+  console.log("LINK ID", linkId);
+
+  try {
+    const clicked = await changeCount(linkId);
+    res.send(clicked);
+  } catch (error) {
+    next(error);
+  }
+>>>>>>> main
 });
 
 module.exports = apiRouter;
