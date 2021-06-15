@@ -62,3 +62,12 @@ export async function updateCount(id) {
     throw error;
   }
 }
+
+export async function linksWithTags(tagName) {
+  try {
+    const { data } = await axios.get(`/api/tags/${tagName}/links`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}

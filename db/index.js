@@ -56,7 +56,7 @@ async function getLinkById(linkId) {
     );
 
     link.tags = tags;
-    console.log(link, "this is my return from get link by id");
+
     return link;
   } catch (error) {
     throw error;
@@ -80,6 +80,7 @@ async function getAllLinks() {
 
 async function createLink({ name, mainLink, comment, tags = [] }) {
   try {
+
     const {
       rows: [links],
     } = await client.query(
@@ -266,6 +267,21 @@ async function updateComment(comment, id) {
   }
 }
 
+async function getLinksBySearch(searchTerm) {
+  try {
+    const {
+      rows: [linkIds],
+    } = await client.query(`
+            SELECT links.id FROM links 
+            WHERE links.name LIKE '%${searchTerm}%';
+        `);
+    return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
+
+  } catch (error) {
+    throw error;
+  }
+}
+
 // export
 module.exports = {
   client,
@@ -281,4 +297,5 @@ module.exports = {
   updateLinks,
   createLinkTag,
   getLinkByTagName,
+  getLinksBySearch
 };

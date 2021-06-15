@@ -34,57 +34,56 @@ const LinkCard = () => {
   };
 
   return (
-    <div>
-      <h1>Links:</h1>
-      <div className="links">
-        {grabbedLinks?.map((link, index) => {
-          return (
-            <div className="linkcard" key={index}>
-              <h2>Site Name:{link.name}</h2>
-              <h2>
-                Link:
-                <span
-                  className="mainlink"
-                  onClick={() => {
-                    window.open(link.mainLink, "_blank").focus();
-                    handleUpdateCount(link.id);
-                  }}
-                >
-                  {link.mainLink}
-                </span>
-              </h2>
-              <h3>Comment:{link.comment}</h3>
-              <h3>Date Shared:{link.share_date}</h3>
-              <h3>Clicks:{link.count}</h3>
-              <h3>
-                <span>Tags:</span>
-                <div className="tags">
-                  {link.tags[0]
-                    ? link.tags.map((tags, index) => {
-                        return (
-                          <span>
-                            <h3 key={index}>{tags.name}</h3>
-                          </span>
-                        );
-                      })
-                    : null}
-                </div>
-              </h3>
-              <div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitUpdateComment(link.comment, link.id)
-                  }
-                >
-                  Edit Comment
-                </button>
+    <div className='cards-container'>
+
+      {grabbedLinks?.map((link, index) => {
+        return (
+          <div className="inner-card" key={index}>
+            <div className='top-row-card'>
+              <div className='click-count-container'>
+                <div className='click-count'>{link.count}</div>
+                <div className='click-label-bottom'>CLICKS</div>
+              </div>
+              <div className='date-container'>
+                <div className='date'>{link.share_date}</div>
+                <div className='date-label-bottom'>DATE SHARED</div>
               </div>
             </div>
-          );
-        })}
-      </div>
+
+            <div className='link-info'>
+              <div className='link-name'>{link.name}</div>
+              <div className='link' onClick={() => {
+                window.open(link.mainLink, "_blank").focus();
+                handleUpdateCount(link.id);
+              }}> {link.mainLink}</div>
+              <div className='comment'>{link.comment}</div>
+              <button
+                type="button"
+                onClick={() =>
+                  handleSubmitUpdateComment(link.comment, link.id)
+                }>
+                Edit Comment
+              </button>
+            </div>
+
+
+            <div className="tag-container">
+              {link.tags[0]
+                ? link.tags.map((tags, index) => {
+                  return (
+                    <div className='tags' key={index}>{tags.name}</div>
+                  );
+                })
+                : null}
+            </div>
+
+            <div>
+            </div>
+          </div>
+        );
+      })}
     </div>
+
   );
 };
 
