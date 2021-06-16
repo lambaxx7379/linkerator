@@ -27,7 +27,6 @@ apiRouter.get("/", async (req, res, next) => {
 });
 
 apiRouter.get("/links", async (req, res, next) => {
-
   try {
     const theLinks = await getAllLinks();
 
@@ -37,9 +36,7 @@ apiRouter.get("/links", async (req, res, next) => {
   }
 });
 
-
 apiRouter.get("/tags", async (req, res, next) => {
-
   try {
     const theTags = await getAllTags();
 
@@ -96,7 +93,7 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
   }
 
   try {
-    await changeCount(linkId);
+    // await changeCount(linkId);
     await getLinkById(linkId);
 
     const updatedLink = await updateComment(comment, linkId);
@@ -106,7 +103,7 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
   }
 });
 
-apiRouter.patch("/links/:linkId", async (req, res, next) => {
+apiRouter.patch("/links/:linkId/count", async (req, res, next) => {
   const { linkId } = req.params;
   console.log("LINK ID", linkId);
 
