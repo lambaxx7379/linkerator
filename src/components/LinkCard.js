@@ -4,7 +4,6 @@ import "./LinkCard.css";
 import { updateCount, updateLink, linksWithTags } from "../api";
 
 const LinkCard = ({ grabbedLinks, setGrabbedLinks }) => {
-  console.log(grabbedLinks, "the grabbed links");
 
   const handleUpdateCount = async (link) => {
     console.log(link);
