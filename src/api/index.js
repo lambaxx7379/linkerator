@@ -66,7 +66,8 @@ export async function updateCount(id) {
 export async function linksWithTags(tagName) {
   try {
     const { data } = await axios.get(`/api/tags/${tagName}/links`);
-    return data.links;
+    console.log(data, "links with tags")
+    return data;
   } catch (error) {
     throw error;
   }
