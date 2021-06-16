@@ -56,7 +56,7 @@ apiRouter.get("/tags/:tagName/links", async (req, res, next) => {
   try {
     const linksWithTags = await getLinkByTagName(tagName);
 
-    res.send({ links: linksWithTags });
+    res.send(linksWithTags);
   } catch (error) {
     next(error);
   }
