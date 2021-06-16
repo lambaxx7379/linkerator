@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { createNewLink } from "../api";
 
 const CreateForm = () => {
-  const [name, setName] = useState("");
-  const [mainLink, setMainLink] = useState("");
-  const [comment, setComment] = useState("");
-  const [tags, setTags] = useState("");
+  const [name, setName] = useState(null);
+  const [mainLink, setMainLink] = useState(null);
+  const [comment, setComment] = useState(null);
+  const [tags, setTags] = useState(null);
 
   async function handleSubmit() {
     await createNewLink(name, mainLink, comment, tags);

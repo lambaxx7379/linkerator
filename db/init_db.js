@@ -37,7 +37,7 @@ async function buildTables() {
         "mainLink" TEXT NOT NULL,
         count INTEGER DEFAULT 0,
         comment VARCHAR(255),
-        share_date DATE default CURRENT_DATE
+        share_date varchar(14) default to_char(CURRENT_DATE, 'yyyy / mm / dd')
         
     );
 
