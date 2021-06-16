@@ -1,22 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import "./LinkCard.css";
-import { getLinks, updateCount, updateLink } from "../api";
+import { updateCount, updateLink, linksWithTags } from "../api";
 
-const LinkCard = () => {
-  const [grabbedLinks, setGrabbedLinks] = useState();
+const LinkCard = ({ grabbedLinks, setGrabbedLinks }) => {
 
-  const getAllLinks = async () => {
-    try {
-      const links = await getLinks();
-      console.log(links);
-      setGrabbedLinks(links);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  useEffect(getAllLinks, []);
+  console.log(grabbedLinks, 'the grabbed links')
 
   const handleUpdateCount = async (link) => {
     console.log(link);
@@ -33,10 +23,23 @@ const LinkCard = () => {
     }
   };
 
+  const handleTagClick = async (tagName) => {
+    console.log(tagName)
+    try {
+      const tagResults = await linksWithTags(tagName)
+      console.log(tagResults, 'this is the links with tags')
+      setGrabbedLinks(tagResults)
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+
+
   return (
     <div className='cards-container'>
 
-      {grabbedLinks?.map((link, index) => {
+      {grabbedLinks.map((link, index) => {
         return (
           <div className="inner-card" key={index}>
             <div className='top-row-card'>
@@ -59,6 +62,7 @@ const LinkCard = () => {
               <div className='comment'>{link.comment}</div>
               <button
                 type="button"
+                className='edit-btn'
                 onClick={() =>
                   handleSubmitUpdateComment(link.comment, link.id)
                 }>
@@ -71,13 +75,17 @@ const LinkCard = () => {
               {link.tags[0]
                 ? link.tags.map((tags, index) => {
                   return (
-                    <div className='tags' key={index}>{tags.name}</div>
+                    <div key={index}>
+                      <button
+                        type="button"
+                        className='tags'
+                        onClick={() => {
+                          handleTagClick(tags.name);
+                        }}>{tags.name}</button>
+                    </div>
                   );
                 })
                 : null}
-            </div>
-
-            <div>
             </div>
           </div>
         );
@@ -85,6 +93,9 @@ const LinkCard = () => {
     </div>
 
   );
+
+
+
 };
 
 export default LinkCard;
