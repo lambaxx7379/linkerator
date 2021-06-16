@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
-  // let originalLinks = [...grabbedLinks]
-
   let originalLinks = grabbedLinks.slice(0);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -21,7 +19,6 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
         }).length > 0
         ? link
         : "";
-      // link.tags.name.toLowerCase().includes(searchQuery.toLowerCase())
     });
     setGrabbedLinks(filteredLinks);
   };
@@ -29,6 +26,15 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
   const handleReset = () => {
     console.log(originalLinks);
     reset();
+  };
+
+  const handleMostPopular = () => {
+    console.log(grabbedLinks);
+    let linkCount = [...grabbedLinks].sort(function (a, b) {
+      return parseInt(b.count) - parseInt(a.count);
+    });
+
+    setGrabbedLinks(linkCount);
   };
 
   return (
@@ -43,6 +49,7 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
       />
       <button onClick={handleSearchSubmit}>Search</button>
       <button onClick={handleReset}>Reset</button>
+      <button onClick={handleMostPopular}>Most Popular</button>
     </>
   );
 };
