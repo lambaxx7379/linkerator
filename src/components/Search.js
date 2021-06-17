@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import "./search.css";
+
 
 const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
   let originalLinks = grabbedLinks.slice(0);
@@ -38,19 +40,28 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
   };
 
   return (
-    <>
-      <div>The Great Linkerator</div>
-      <input
-        type="text"
-        id="header-search"
-        placeholder="Search for links"
-        name="s"
-        onChange={handleOnChange}
-      />
-      <button onClick={handleSearchSubmit}>Search</button>
-      <button onClick={handleReset}>Reset</button>
-      <button onClick={handleMostPopular}>Most Popular</button>
-    </>
+    <div className="search-container">
+      <div className="title-container" >
+        <div className="site-title">The Great Linkerator</div>
+        <p>Share your favorite links here!</p>
+      </div>
+
+      <div className="action-container">
+        <input
+          type="text"
+          id="header-search"
+          placeholder="Search for links"
+          name="s"
+          onChange={handleOnChange}
+          className="search-input"
+        />
+
+        <button onClick={handleSearchSubmit}>Search</button>
+        <button onClick={handleReset}>Reset</button>
+        <button onClick={handleMostPopular}>Most Popular</button>
+      </div>
+    </div>
+
   );
 };
 

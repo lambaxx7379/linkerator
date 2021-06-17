@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { createNewLink } from "../api";
+import "./form.css";
+
 
 const CreateForm = () => {
   const [name, setName] = useState(null);
   const [mainLink, setMainLink] = useState(null);
   const [comment, setComment] = useState(null);
   const [tags, setTags] = useState(null);
+
 
   async function handleSubmit() {
     await createNewLink(name, mainLink, comment, tags);
@@ -44,8 +47,9 @@ const CreateForm = () => {
           </button>
         </form>
       </div>
-    </div>
+    </div >
   );
-};
+}
+
 
 export default CreateForm;

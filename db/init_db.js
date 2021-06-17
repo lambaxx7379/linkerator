@@ -116,13 +116,13 @@ async function testDB() {
     const links = await getAllLinks();
     console.log("Get All Links Result:", links);
 
-    console.log("Calling updateLinks on links[0]");
-    const updateLinkResult = await updateLinks(links[0].id, {
-      name: "New Name",
-      comment: "Updated Comment",
-      tags: ['new tags', 'updated tags', 'an extra tag', 'how many tags can i add']
-    });
-    console.log("Result:", updateLinkResult);
+    // console.log("Calling updateLinks on links[0]");
+    // const updateLinkResult = await updateLinks(links[0].id, {
+    //   name: "New Name",
+    //   comment: "Updated Comment",
+    //   tags: ['new tags', 'updated tags', 'an extra tag', 'how many tags can i add']
+    // });
+    // console.log("Result:", updateLinkResult);
 
     console.log("Calling getLinkById with 1");
     const singleLink = await getLinkById(1);

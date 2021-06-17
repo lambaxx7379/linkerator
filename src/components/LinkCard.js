@@ -74,20 +74,20 @@ const LinkCard = ({ grabbedLinks, setGrabbedLinks }) => {
             <div className="tag-container">
               {link.tags[0]
                 ? link.tags.map((tags, index) => {
-                    return (
-                      <div key={index}>
-                        <button
-                          type="button"
-                          className="tags"
-                          onClick={() => {
-                            handleTagClick(tags.name);
-                          }}
-                        >
-                          {tags.name}
-                        </button>
-                      </div>
-                    );
-                  })
+                  return (
+                    <div key={index}>
+                      <button
+                        type="button"
+                        className="tags"
+                        onClick={() => {
+                          handleTagClick(tags.name);
+                        }}
+                      >
+                        {tags.name}
+                      </button>
+                    </div>
+                  );
+                })
                 : null}
             </div>
           </div>
