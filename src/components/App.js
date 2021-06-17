@@ -5,6 +5,7 @@ import CreateForm from "./CreateForm";
 import LinkCard from "./LinkCard";
 import Search from "./Search"
 import { getLinks } from "../api";
+import linkBackground from "../img/link_background.png"
 
 
 const App = () => {
@@ -32,12 +33,16 @@ const App = () => {
 
     <div className="App">
 
-      <header>
+      <header style={{
+        backgroundImage: `url(${linkBackground})`
+      }}>
+
         <Search
           grabbedLinks={grabbedLinks}
           setGrabbedLinks={setGrabbedLinks}
           reset={retrieveLinks}
         />
+
 
       </header>
 
