@@ -4,9 +4,7 @@ import "./LinkCard.css";
 import { updateCount, updateLink, linksWithTags } from "../api";
 
 const LinkCard = ({ grabbedLinks, setGrabbedLinks }) => {
-
   const handleUpdateCount = async (link) => {
-    console.log(link);
     await updateCount(link);
     window.location.reload();
   };
@@ -21,10 +19,8 @@ const LinkCard = ({ grabbedLinks, setGrabbedLinks }) => {
   };
 
   const handleTagClick = async (tagName) => {
-    console.log(tagName);
     try {
       const tagResults = await linksWithTags(tagName);
-      console.log(tagResults, "this is the links with tags");
       setGrabbedLinks(tagResults);
     } catch (error) {
       console.error(error);
@@ -74,20 +70,20 @@ const LinkCard = ({ grabbedLinks, setGrabbedLinks }) => {
             <div className="tag-container">
               {link.tags[0]
                 ? link.tags.map((tags, index) => {
-                  return (
-                    <div key={index}>
-                      <button
-                        type="button"
-                        className="tags"
-                        onClick={() => {
-                          handleTagClick(tags.name);
-                        }}
-                      >
-                        {tags.name}
-                      </button>
-                    </div>
-                  );
-                })
+                    return (
+                      <div key={index}>
+                        <button
+                          type="button"
+                          className="tags"
+                          onClick={() => {
+                            handleTagClick(tags.name);
+                          }}
+                        >
+                          {tags.name}
+                        </button>
+                      </div>
+                    );
+                  })
                 : null}
             </div>
           </div>

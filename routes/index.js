@@ -105,7 +105,6 @@ apiRouter.patch("/links/:linkId", async (req, res, next) => {
 
 apiRouter.patch("/links/:linkId/count", async (req, res, next) => {
   const { linkId } = req.params;
-  console.log("LINK ID", linkId);
 
   try {
     const clicked = await changeCount(linkId);

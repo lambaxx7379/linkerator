@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./search.css";
-
 
 const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
   let originalLinks = grabbedLinks.slice(0);
@@ -9,11 +8,9 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
   const handleOnChange = (event) => {
     const keyWords = event.target.value;
     setSearchQuery(keyWords);
-    console.log(searchQuery);
   };
 
-  const handleSearchSubmit = (event) => {
-    console.log(grabbedLinks);
+  const handleSearchSubmit = () => {
     let filteredLinks = grabbedLinks.filter((link) => {
       return link.mainLink.toLowerCase().includes(searchQuery.toLowerCase()) ||
         link.tags.filter((tag) => {
@@ -26,12 +23,10 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
   };
 
   const handleReset = () => {
-    console.log(originalLinks);
     reset();
   };
 
   const handleMostPopular = () => {
-    console.log(grabbedLinks);
     let linkCount = [...grabbedLinks].sort(function (a, b) {
       return parseInt(b.count) - parseInt(a.count);
     });
@@ -41,7 +36,7 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
 
   return (
     <div className="search-container">
-      <div className="title-container" >
+      <div className="title-container">
         <div className="site-title">The Great Linkerator</div>
         <p>Share your favorite links here!</p>
       </div>
@@ -61,7 +56,6 @@ const Search = ({ grabbedLinks, setGrabbedLinks, reset }) => {
         <button onClick={handleMostPopular}>Most Popular</button>
       </div>
     </div>
-
   );
 };
 

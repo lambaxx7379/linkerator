@@ -80,7 +80,6 @@ async function getAllLinks() {
 
 async function createLink({ name, mainLink, comment, tags = [] }) {
   try {
-
     const {
       rows: [links],
     } = await client.query(
@@ -239,7 +238,6 @@ async function changeCount(id) {
         `,
       [id]
     );
-    console.log("Link Information", link);
 
     return link;
   } catch (error) {
@@ -260,7 +258,7 @@ async function updateComment(comment, id) {
     `,
       [comment, id]
     );
-    console.log(link);
+
     return link;
   } catch (error) {
     throw error;
@@ -276,7 +274,6 @@ async function getLinksBySearch(searchTerm) {
             WHERE links.name LIKE '%${searchTerm}%';
         `);
     return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
-
   } catch (error) {
     throw error;
   }
@@ -297,5 +294,5 @@ module.exports = {
   updateLinks,
   createLinkTag,
   getLinkByTagName,
-  getLinksBySearch
+  getLinksBySearch,
 };
